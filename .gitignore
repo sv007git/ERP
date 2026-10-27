@@ -1,0 +1,32 @@
+# Dependencies
+node_modules/
+vendor/
+
+# Build artifacts
+dist/
+build/
+*.log
+
+# Environment & Secrets
+.env
+.env.local
+*.env
+
+# Local Databases & Caches
+*.sqlite
+*.sqlite3
+.cache/
+.temp/
+.tmp/
+
+# Local Tools Runtime
+tools/
+
+# Reference Repositories (Stored locally, not tracked in git)
+New folder/
+references/
+
+# OS Files
+.DS_Store
+Thumbs.db
+desktop.ini
