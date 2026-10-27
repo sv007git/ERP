@@ -35,6 +35,10 @@ echo "========================================================\n\n";
 $pdo = Database::getConnection();
 $orgId = 'org-falcon-llp-001';
 
+// Reset baseline test state for idempotency across repeated runs
+$pdo->exec("UPDATE employees SET leave_balance = 20.0 WHERE id = 'emp-001'");
+$pdo->exec("UPDATE products SET quantity = 2 WHERE id = 'prd-020'");
+
 // TEST 1: Double-Entry Financial Invariant & Sales-to-Cash
 echo "TEST SUITE 1: Double-Entry Accounting & Sales-to-Cash Lifecycle\n";
 $acc = new AccountingService($pdo);
