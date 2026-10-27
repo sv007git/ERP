@@ -1,18 +1,55 @@
 import React, { useState } from 'react';
 import { LocalErpStore } from '../lib/supabase';
 import type { Employee } from '../types/database';
-import { Users, Calendar, Clock, DollarSign, CheckCircle2, UserPlus, Briefcase } from 'lucide-react';
+import { Users, Calendar, Clock, DollarSign, CheckCircle2, UserPlus, Briefcase, X } from 'lucide-react';
 
 export const HrmDashboard: React.FC = () => {
-  const [employees, setEmployees] = useState<Employee[]>(LocalErpStore.getEmployees());
+  const [employees, setEmployees] = useState<Employee[]>(() => LocalErpStore.getEmployees());
   const [clockedIn, setClockedIn] = useState(false);
   const [leavePending, setLeavePending] = useState(true);
+  const [message, setMessage] = useState<string | null>(null);
+
+  // Add Employee modal
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [fullName, setFullName] = useState('');
+  const [email, setEmail] = useState('');
+  const [department, setDepartment] = useState('Engineering');
+  const [position, setPosition] = useState('');
+  const [salary, setSalary] = useState('7500');
 
   const handleApproveLeave = () => {
-    // Deduct 3 days from Alex Thompson (emp-001)
-    const updated = LocalErpStore.deductLeave('emp-001', 3);
-    setEmployees(prev => prev.map(e => e.id === 'emp-001' ? updated : e));
-    setLeavePending(false);
+    try {
+      const updated = LocalErpStore.deductLeave('emp-001', 3);
+      setEmployees([...LocalErpStore.getEmployees()]);
+      setLeavePending(false);
+      setMessage(`Leave approved for Alex Thompson! 3 days deducted. Remaining balance: ${updated.leave_balance} days.`);
+      setTimeout(() => setMessage(null), 4000);
+    } catch (e: any) {
+      setMessage(e.message);
+    }
+  };
+
+  const handleAddEmployee = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!fullName.trim() || !email.trim()) return;
+
+    LocalErpStore.addEmployee({
+      full_name: fullName.trim(),
+      email: email.trim(),
+      department_name: department,
+      position: position.trim() || 'Software Specialist',
+      salary: parseFloat(salary) || 5000,
+      leave_balance: 20,
+      status: 'Active'
+    });
+
+    setEmployees([...LocalErpStore.getEmployees()]);
+    setFullName('');
+    setEmail('');
+    setPosition('');
+    setShowAddModal(false);
+    setMessage(`Employee ${fullName.trim()} registered successfully!`);
+    setTimeout(() => setMessage(null), 4000);
   };
 
   return (
@@ -22,12 +59,16 @@ export const HrmDashboard: React.FC = () => {
         <div>
           <h1 className="text-xl font-bold text-slate-900">Good morning, Andrew</h1>
           <p className="text-xs text-slate-500 mt-1">
-            You have {leavePending ? '1 pending leave request' : '0 pending requests'} and 2 urgent talent review alerts.
+            You have {leavePending ? '1 pending leave request' : '0 pending requests'} and {employees.length} active team members.
           </p>
         </div>
         <div className="flex items-center space-x-3 text-xs">
           <button
-            onClick={() => setClockedIn(true)}
+            onClick={() => {
+              setClockedIn(true);
+              setMessage('Clocked in successfully at ' + new Date().toLocaleTimeString());
+              setTimeout(() => setMessage(null), 3000);
+            }}
             className={`px-4 py-2 rounded-lg font-semibold flex items-center transition ${
               clockedIn
                 ? 'bg-emerald-100 text-emerald-800 cursor-default'
@@ -35,14 +76,23 @@ export const HrmDashboard: React.FC = () => {
             }`}
           >
             <Clock className="w-3.5 h-3.5 mr-1.5" />
-            {clockedIn ? 'Clocked In: 09:00 AM' : 'Clock In Now'}
+            {clockedIn ? 'Clocked In (Active)' : 'Clock In Now'}
           </button>
-          <button className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-4 py-2 rounded-lg shadow-sm flex items-center transition">
+          <button
+            onClick={() => setShowAddModal(true)}
+            className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-4 py-2 rounded-lg shadow-sm flex items-center transition"
+          >
             <UserPlus className="w-3.5 h-3.5 mr-1.5" />
             + Add Employee
           </button>
         </div>
       </div>
+
+      {message && (
+        <div className="p-3 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-lg text-xs font-semibold shadow-xs">
+          {message}
+        </div>
+      )}
 
       {/* HRM KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -52,8 +102,8 @@ export const HrmDashboard: React.FC = () => {
             <Users className="w-5 h-5 text-indigo-500" />
           </div>
           <div className="mt-3">
-            <div className="text-2xl font-bold text-slate-900">1,284</div>
-            <span className="text-emerald-600 text-xs font-semibold">↗ 12 new this month</span>
+            <div className="text-2xl font-bold text-slate-900">{employees.length} Employees</div>
+            <span className="text-emerald-600 text-xs font-semibold">Active team profiles</span>
           </div>
         </div>
 
@@ -63,8 +113,8 @@ export const HrmDashboard: React.FC = () => {
             <Calendar className="w-5 h-5 text-amber-500" />
           </div>
           <div className="mt-3">
-            <div className="text-2xl font-bold text-slate-900">23</div>
-            <span className="text-slate-400 text-xs">9 planned, 14 unplanned</span>
+            <div className="text-2xl font-bold text-slate-900">{leavePending ? '1' : '0'} Pending</div>
+            <span className="text-slate-400 text-xs">Annual & sick leaves</span>
           </div>
         </div>
 
@@ -74,8 +124,8 @@ export const HrmDashboard: React.FC = () => {
             <CheckCircle2 className="w-5 h-5 text-emerald-500" />
           </div>
           <div className="mt-3">
-            <div className="text-2xl font-bold text-slate-900">94.2%</div>
-            <span className="text-emerald-600 text-xs font-semibold">↗ +3.6% vs target</span>
+            <div className="text-2xl font-bold text-slate-900">96.8%</div>
+            <span className="text-emerald-600 text-xs font-semibold">↗ High punctuality</span>
           </div>
         </div>
 
@@ -85,8 +135,10 @@ export const HrmDashboard: React.FC = () => {
             <DollarSign className="w-5 h-5 text-purple-500" />
           </div>
           <div className="mt-3">
-            <div className="text-2xl font-bold text-slate-900">$1,248K</div>
-            <span className="text-slate-400 text-xs">March 2026 processing</span>
+            <div className="text-2xl font-bold text-slate-900">
+              ${employees.reduce((sum, e) => sum + e.salary, 0).toLocaleString()}
+            </div>
+            <span className="text-slate-400 text-xs">Monthly base calculation</span>
           </div>
         </div>
       </div>
@@ -121,7 +173,12 @@ export const HrmDashboard: React.FC = () => {
             <Briefcase className="w-4 h-4 mr-2 text-slate-500" />
             Active Employee Directory
           </h4>
-          <span className="text-xs text-slate-400">Showing {employees.length} employees</span>
+          <button
+            onClick={() => setShowAddModal(true)}
+            className="text-xs text-emerald-600 hover:text-emerald-700 font-semibold"
+          >
+            + Add Employee
+          </button>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
@@ -163,6 +220,94 @@ export const HrmDashboard: React.FC = () => {
           </table>
         </div>
       </div>
+
+      {/* Modal: Add Employee */}
+      {showAddModal && (
+        <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl shadow-xl border border-slate-200 w-full max-w-md p-6">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
+              <h3 className="text-base font-bold text-slate-900">Register Employee</h3>
+              <button onClick={() => setShowAddModal(false)} className="text-slate-400 hover:text-slate-600">
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+            <form onSubmit={handleAddEmployee} className="space-y-4 text-xs">
+              <div>
+                <label className="block font-semibold text-slate-700 mb-1">Full Name *</label>
+                <input
+                  type="text"
+                  value={fullName}
+                  onChange={e => setFullName(e.target.value)}
+                  placeholder="e.g. Sarah Jenkins"
+                  required
+                  className="w-full p-2.5 rounded-lg border border-slate-300 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                />
+              </div>
+              <div>
+                <label className="block font-semibold text-slate-700 mb-1">Work Email *</label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  placeholder="e.g. sarah@falcon.com"
+                  required
+                  className="w-full p-2.5 rounded-lg border border-slate-300 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block font-semibold text-slate-700 mb-1">Department</label>
+                  <select
+                    value={department}
+                    onChange={e => setDepartment(e.target.value)}
+                    className="w-full p-2.5 rounded-lg border border-slate-300 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                  >
+                    <option value="Engineering">Engineering</option>
+                    <option value="Sales">Sales</option>
+                    <option value="Finance">Finance</option>
+                    <option value="Marketing">Marketing</option>
+                    <option value="HR">HR</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block font-semibold text-slate-700 mb-1">Position</label>
+                  <input
+                    type="text"
+                    value={position}
+                    onChange={e => setPosition(e.target.value)}
+                    placeholder="e.g. Frontend Engineer"
+                    className="w-full p-2.5 rounded-lg border border-slate-300 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="block font-semibold text-slate-700 mb-1">Monthly Salary ($)</label>
+                <input
+                  type="number"
+                  value={salary}
+                  onChange={e => setSalary(e.target.value)}
+                  className="w-full p-2.5 rounded-lg border border-slate-300 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                />
+              </div>
+              <div className="flex justify-end space-x-2 pt-3 border-t border-slate-100">
+                <button
+                  type="button"
+                  onClick={() => setShowAddModal(false)}
+                  className="px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-lg"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-5 py-2 font-semibold bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg shadow-xs"
+                >
+                  Save Employee
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

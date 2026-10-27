@@ -1,16 +1,69 @@
 import React, { useState } from 'react';
 import { LocalErpStore } from '../lib/supabase';
 import type { Product } from '../types/database';
-import { Package, TrendingUp, Warehouse as WarehouseIcon, Plus, ArrowUpRight } from 'lucide-react';
+import { Package, TrendingUp, Warehouse as WarehouseIcon, Plus, ArrowUpRight, X } from 'lucide-react';
 
 export const InventoryDashboard: React.FC = () => {
-  const [products, setProducts] = useState<Product[]>(LocalErpStore.getProducts());
+  const [products, setProducts] = useState<Product[]>(() => LocalErpStore.getProducts());
   const [receivedMessage, setReceivedMessage] = useState<string | null>(null);
+
+  // Add Product modal
+  const [showAddProduct, setShowAddProduct] = useState(false);
+  const [name, setName] = useState('');
+  const [sku, setSku] = useState('');
+  const [category, setCategory] = useState('Smartphones');
+  const [sellingPrice, setSellingPrice] = useState('299');
+  const [purchasePrice, setPurchasePrice] = useState('250');
+  const [quantity, setQuantity] = useState('10');
 
   const handleReceiveStock = (productId: string) => {
     const updated = LocalErpStore.adjustStock(productId, 10);
-    setProducts(prev => prev.map(p => p.id === productId ? updated : p));
+    setProducts([...LocalErpStore.getProducts()]);
     setReceivedMessage(`Received +10 units of ${updated.name}. New quantity: ${updated.quantity}`);
+    setTimeout(() => setReceivedMessage(null), 4000);
+  };
+
+  const handleReduceStock = (productId: string) => {
+    try {
+      const prod = products.find(p => p.id === productId);
+      if (!prod || prod.quantity < 5) {
+        setReceivedMessage(`Cannot reduce below 0. Current quantity: ${prod?.quantity || 0}`);
+        setTimeout(() => setReceivedMessage(null), 3000);
+        return;
+      }
+      const updated = LocalErpStore.adjustStock(productId, -5);
+      setProducts([...LocalErpStore.getProducts()]);
+      setReceivedMessage(`Dispatched -5 units of ${updated.name}. Remaining: ${updated.quantity}`);
+      setTimeout(() => setReceivedMessage(null), 4000);
+    } catch (e: any) {
+      setReceivedMessage(e.message);
+      setTimeout(() => setReceivedMessage(null), 3000);
+    }
+  };
+
+  const handleCreateProduct = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!name.trim()) return;
+    const qty = parseInt(quantity) || 0;
+    const sell = parseFloat(sellingPrice) || 0;
+    const buy = parseFloat(purchasePrice) || 0;
+
+    LocalErpStore.addProduct({
+      name: name.trim(),
+      sku: sku.trim() || ('SKU-' + Math.floor(1000 + Math.random() * 9000)),
+      category,
+      unit: 'Piece',
+      quantity: qty,
+      selling_price: sell,
+      purchase_price: buy,
+      status: qty > 0 ? 'In Stock' : 'Out of Stock'
+    });
+
+    setProducts([...LocalErpStore.getProducts()]);
+    setName('');
+    setSku('');
+    setShowAddProduct(false);
+    setReceivedMessage(`Product ${name.trim()} added successfully!`);
     setTimeout(() => setReceivedMessage(null), 4000);
   };
 
@@ -26,18 +79,18 @@ export const InventoryDashboard: React.FC = () => {
           <p className="text-xs text-slate-500 mt-1">Multi-warehouse stock levels, SKU tracking, and inventory valuation.</p>
         </div>
         <div className="flex items-center space-x-3 text-xs">
-          <span className="bg-white border border-slate-200 px-3 py-1.5 rounded-lg text-slate-600 font-medium">
-            Last 30 Days
-          </span>
-          <button className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-4 py-1.5 rounded-lg shadow-sm flex items-center transition">
+          <button
+            onClick={() => setShowAddProduct(true)}
+            className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-4 py-2 rounded-lg shadow-sm flex items-center transition"
+          >
             <Plus className="w-3.5 h-3.5 mr-1" />
-            + Add Inventory
+            + Add Product
           </button>
         </div>
       </div>
 
       {receivedMessage && (
-        <div className="p-3 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-lg text-xs font-semibold flex items-center justify-between">
+        <div className="p-3 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-lg text-xs font-semibold flex items-center justify-between shadow-xs">
           <span>{receivedMessage}</span>
           <span className="text-[10px] text-emerald-600">Stock Ledger Entry Appended</span>
         </div>
@@ -53,7 +106,7 @@ export const InventoryDashboard: React.FC = () => {
           <div className="mt-4">
             <div className="text-2xl font-bold text-slate-900">{totalQuantity} units</div>
             <div className="flex items-center mt-2 text-xs text-emerald-600 font-semibold">
-              <ArrowUpRight className="w-3.5 h-3.5 mr-0.5" /> +5.43% from last week
+              <ArrowUpRight className="w-3.5 h-3.5 mr-0.5" /> Across {products.length} catalog items
             </div>
           </div>
         </div>
@@ -101,7 +154,7 @@ export const InventoryDashboard: React.FC = () => {
       <div className="bg-white rounded-xl border border-slate-100 shadow-sm p-6">
         <div className="flex items-center justify-between mb-4">
           <h4 className="text-base font-semibold text-slate-800">Recent Stocks</h4>
-          <span className="text-xs text-slate-400">Real-time Stock Tracking</span>
+          <span className="text-xs text-slate-400">{products.length} Products Tracked</span>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
@@ -111,12 +164,10 @@ export const InventoryDashboard: React.FC = () => {
                 <th className="py-2.5 px-3">Product Name</th>
                 <th className="py-2.5 px-3">SKU</th>
                 <th className="py-2.5 px-3">Category</th>
-                <th className="py-2.5 px-3">Unit</th>
                 <th className="py-2.5 px-3">Qty</th>
                 <th className="py-2.5 px-3">Selling Price</th>
-                <th className="py-2.5 px-3">Purchase Price</th>
                 <th className="py-2.5 px-3">Status</th>
-                <th className="py-2.5 px-3 text-right">Quick Action</th>
+                <th className="py-2.5 px-3 text-right">Quick Stock Operations</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 text-slate-700">
@@ -126,10 +177,8 @@ export const InventoryDashboard: React.FC = () => {
                   <td className="py-3 px-3 font-medium text-slate-900">{p.name}</td>
                   <td className="py-3 px-3 text-slate-500 font-mono text-[11px]">{p.sku}</td>
                   <td className="py-3 px-3">{p.category}</td>
-                  <td className="py-3 px-3">{p.unit}</td>
                   <td className="py-3 px-3 font-bold text-slate-900">{p.quantity}</td>
                   <td className="py-3 px-3 font-semibold text-slate-900">${p.selling_price.toFixed(2)}</td>
-                  <td className="py-3 px-3 text-slate-500">${p.purchase_price.toFixed(2)}</td>
                   <td className="py-3 px-3">
                     <span className={`px-2.5 py-0.5 rounded-full text-xs font-semibold border ${
                       p.status === 'In Stock'
@@ -139,12 +188,18 @@ export const InventoryDashboard: React.FC = () => {
                       {p.status}
                     </span>
                   </td>
-                  <td className="py-3 px-3 text-right">
+                  <td className="py-3 px-3 text-right space-x-1.5">
                     <button
                       onClick={() => handleReceiveStock(p.id)}
-                      className="px-2.5 py-1 text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 rounded transition"
+                      className="px-2.5 py-1 text-xs font-semibold bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 rounded transition"
                     >
                       + Receive 10
+                    </button>
+                    <button
+                      onClick={() => handleReduceStock(p.id)}
+                      className="px-2.5 py-1 text-xs font-semibold bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 rounded transition"
+                    >
+                      - Dispatch 5
                     </button>
                   </td>
                 </tr>
@@ -153,6 +208,103 @@ export const InventoryDashboard: React.FC = () => {
           </table>
         </div>
       </div>
+
+      {/* Modal: Add Product */}
+      {showAddProduct && (
+        <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl shadow-xl border border-slate-200 w-full max-w-md p-6">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
+              <h3 className="text-base font-bold text-slate-900">Add New Product</h3>
+              <button onClick={() => setShowAddProduct(false)} className="text-slate-400 hover:text-slate-600">
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+            <form onSubmit={handleCreateProduct} className="space-y-4 text-xs">
+              <div>
+                <label className="block font-semibold text-slate-700 mb-1">Product Name *</label>
+                <input
+                  type="text"
+                  value={name}
+                  onChange={e => setName(e.target.value)}
+                  placeholder="e.g. MacBook Pro M3"
+                  required
+                  className="w-full p-2.5 rounded-lg border border-slate-300 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block font-semibold text-slate-700 mb-1">SKU</label>
+                  <input
+                    type="text"
+                    value={sku}
+                    onChange={e => setSku(e.target.value)}
+                    placeholder="e.g. MAC-M3-16"
+                    className="w-full p-2.5 rounded-lg border border-slate-300 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                  />
+                </div>
+                <div>
+                  <label className="block font-semibold text-slate-700 mb-1">Category</label>
+                  <select
+                    value={category}
+                    onChange={e => setCategory(e.target.value)}
+                    className="w-full p-2.5 rounded-lg border border-slate-300 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                  >
+                    <option value="Smartphones">Smartphones</option>
+                    <option value="Computers">Computers</option>
+                    <option value="Headphones">Headphones</option>
+                    <option value="Footwear">Footwear</option>
+                    <option value="Appliances">Appliances</option>
+                  </select>
+                </div>
+              </div>
+              <div className="grid grid-cols-3 gap-3">
+                <div>
+                  <label className="block font-semibold text-slate-700 mb-1">Qty</label>
+                  <input
+                    type="number"
+                    value={quantity}
+                    onChange={e => setQuantity(e.target.value)}
+                    className="w-full p-2.5 rounded-lg border border-slate-300 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                  />
+                </div>
+                <div>
+                  <label className="block font-semibold text-slate-700 mb-1">Selling ($)</label>
+                  <input
+                    type="number"
+                    value={sellingPrice}
+                    onChange={e => setSellingPrice(e.target.value)}
+                    className="w-full p-2.5 rounded-lg border border-slate-300 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                  />
+                </div>
+                <div>
+                  <label className="block font-semibold text-slate-700 mb-1">Cost ($)</label>
+                  <input
+                    type="number"
+                    value={purchasePrice}
+                    onChange={e => setPurchasePrice(e.target.value)}
+                    className="w-full p-2.5 rounded-lg border border-slate-300 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                  />
+                </div>
+              </div>
+              <div className="flex justify-end space-x-2 pt-3 border-t border-slate-100">
+                <button
+                  type="button"
+                  onClick={() => setShowAddProduct(false)}
+                  className="px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-lg"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-5 py-2 font-semibold bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg shadow-xs"
+                >
+                  Save Product
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
