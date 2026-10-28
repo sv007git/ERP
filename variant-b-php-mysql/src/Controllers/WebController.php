@@ -312,7 +312,7 @@ class WebController
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{$title} - Dreams ERP (Variant B)</title>
+    <title>{$title} - ERP (Variant B)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -327,7 +327,7 @@ class WebController
             <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center text-white font-bold text-base mr-3 shadow-sm">
                 ✦
             </div>
-            <span class="text-base font-bold text-white tracking-wide">Dreams ERP</span>
+            <span class="text-base font-bold text-white tracking-wide">ERP</span>
         </div>
 
         <!-- Navigation Menu -->
@@ -362,7 +362,7 @@ class WebController
 
         <div class="p-4 border-t border-slate-800 text-xs text-slate-500">
             Variant B: PHP 8.5 + SQLite/MySQL<br>
-            2026 &copy; Dreams ERP
+            2026 &copy; ERP
         </div>
     </aside>
 

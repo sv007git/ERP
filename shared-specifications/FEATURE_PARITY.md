@@ -1,7 +1,7 @@
-# Dual-Stack Feature Parity Matrix
+﻿# Dual-Stack Feature Parity Matrix
 
 **Document:** `shared-specifications/FEATURE_PARITY.md`  
-**System:** Dreams ERP / CRM Dual-Stack Platform  
+**System:** ERP / CRM Dual-Stack Platform  
 **Purpose:** Maps every business workflow to both Variant A and Variant B implementations to ensure strict functional equivalence.
 
 ---
@@ -27,7 +27,7 @@
 | **Inventory: Warehouses** | Capacity, Utilization gauge %, location details | Warehouses Table + Calculation | Warehouse Model + Stats API | **Complete** |
 | **Inventory: Stock Ledger** | Traceable quantity deltas per movement (In/Out) | Immutable `stock_ledger_entries` | Immutable `stock_ledger_entries` | **Complete** |
 | **Purchasing: PO to Receipt** | Create PO -> Goods Receipt -> increment stock balance | PO State Machine + Stock Entry | Purchase Order Service + Inventory | **Complete** |
-| **UI: Dreams ERP Aesthetic** | 4-card KPI row, sidebar navigation, dark/light theme | Tailwind CSS + Lucide React | Clean Blade / HTML + Tailwind | **Complete** |
+| **UI: ERP Aesthetic** | 4-card KPI row, sidebar navigation, dark/light theme | Tailwind CSS + Lucide React | Clean Blade / HTML + Tailwind | **Complete** |
 
 ---
 

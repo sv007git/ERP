@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest';
 import { LocalErpStore } from './lib/supabase';
 
-describe('Dreams ERP Variant A - Business Logic Unit Tests', () => {
-  it('loads seeded CRM leads and deals matching Dreams ERP', () => {
+describe('ERP Variant A - Comprehensive Business Logic Unit Tests', () => {
+  it('loads seeded CRM leads and deals matching ERP specification', () => {
     const leads = LocalErpStore.getLeads();
     const deals = LocalErpStore.getDeals();
 
@@ -13,6 +13,7 @@ describe('Dreams ERP Variant A - Business Logic Unit Tests', () => {
     expect(deals.length).toBeGreaterThanOrEqual(5);
     expect(deals[0].code).toBe('#DEL0020');
     expect(deals[0].name).toBe('CRM Subscription');
+    expect(deals[0].deal_value).toBe(2511145);
   });
 
   it('advances deal pipeline stages with correct probabilities', () => {
@@ -23,15 +24,16 @@ describe('Dreams ERP Variant A - Business Logic Unit Tests', () => {
     expect(updated.status).toBe('Won');
   });
 
-  it('records activities on a deal', () => {
+  it('records activities on a deal across date groups', () => {
     const act = LocalErpStore.addActivity('del-020', {
-      title: 'Contract Signing',
-      description: 'Signed annual SaaS contract with client.',
-      type: 'task',
+      title: 'Contract Signing & SLA Walkthrough',
+      description: 'Signed annual SaaS contract with client legal team.',
+      type: 'meeting',
+      date_group: 'Today',
       user_name: 'Jamie Anderson'
     });
 
-    expect(act.title).toBe('Contract Signing');
+    expect(act.title).toBe('Contract Signing & SLA Walkthrough');
     expect(act.user_name).toBe('Jamie Anderson');
 
     const activities = LocalErpStore.getActivities('del-020');
@@ -59,5 +61,50 @@ describe('Dreams ERP Variant A - Business Logic Unit Tests', () => {
     const paid = LocalErpStore.recordPayment('inv-019', 650);
     expect(paid.status).toBe('Paid');
     expect(paid.paid_amount).toBe(650);
+  });
+
+  it('creates purchase orders and tracks procurement volume', () => {
+    const po = LocalErpStore.createPurchaseOrder({
+      supplier_name: 'Orion Equipments',
+      category: 'Office Supplies',
+      total_amount: 860,
+      ordered_qty: 10,
+      order_date: '2026-10-28',
+      delivery_date: '2026-11-05'
+    });
+
+    expect(po.supplier_name).toBe('Orion Equipments');
+    expect(po.status).toBe('Pending');
+    expect(LocalErpStore.getPurchaseOrders().some(p => p.id === po.id)).toBe(true);
+  });
+
+  it('creates projects and tracks completion progress', () => {
+    const proj = LocalErpStore.addProject({
+      name: 'Mobile Fleet Management',
+      description: 'GPS telemetry tracking and route optimization software.',
+      progress: 45,
+      team_leader: 'Avery Thompson',
+      team_members: ['Alex T.', 'Thomas M.'],
+      deadline: '2026-12-15',
+      status: 'In Progress'
+    });
+
+    expect(proj.name).toBe('Mobile Fleet Management');
+    expect(proj.progress).toBe(45);
+    expect(LocalErpStore.getProjects().some(p => p.id === proj.id)).toBe(true);
+  });
+
+  it('creates support tickets and resolves issues', () => {
+    const tkt = LocalErpStore.addTicket({
+      customer_name: 'Nexus Dynamics',
+      subject: 'SSO Authentication Failure',
+      priority: 'High',
+      assigned_to: 'Steven Schroer',
+      status: 'Open'
+    });
+
+    expect(tkt.status).toBe('Open');
+    const resolved = LocalErpStore.updateTicketStatus(tkt.id, 'Resolved');
+    expect(resolved.status).toBe('Resolved');
   });
 });

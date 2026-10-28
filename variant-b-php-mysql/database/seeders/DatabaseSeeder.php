@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 declare(strict_types=1);
 
@@ -10,7 +10,7 @@ class DatabaseSeeder
 {
     public static function seed(PDO $pdo): void
     {
-        echo "Seeding Dreams ERP development records...\n";
+        echo "Seeding ERP development records...\n";
 
         // 1. Organization
         $orgId = 'org-falcon-llp-001';

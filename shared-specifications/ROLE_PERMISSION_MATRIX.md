@@ -1,6 +1,6 @@
-# Role & Permission Matrix
+﻿# Role & Permission Matrix
 
-**System:** Dreams ERP / CRM Dual-Stack Platform  
+**System:** ERP / CRM Dual-Stack Platform  
 **Document:** `shared-specifications/ROLE_PERMISSION_MATRIX.md`  
 **Security Model:** Mandatory Multi-Tenant Role-Based Access Control (RBAC)  
 

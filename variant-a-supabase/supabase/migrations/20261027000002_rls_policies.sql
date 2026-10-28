@@ -1,4 +1,4 @@
--- Dreams ERP: Row Level Security (RLS) Policies Migration
+﻿-- ERP: Row Level Security (RLS) Policies Migration
 -- Migration: 20261027000002_rls_policies.sql
 
 -- Helper function: Check if current user belongs to organization

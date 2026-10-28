@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 declare(strict_types=1);
 
@@ -6,7 +6,7 @@ require_once __DIR__ . '/../src/Core/Database.php';
 
 use App\Core\Database;
 
-echo "=== Dreams ERP Database Migration Runner ===\n";
+echo "=== ERP Database Migration Runner ===\n";
 
 try {
     $pdo = Database::getConnection();

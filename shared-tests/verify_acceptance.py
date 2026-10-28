@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Dreams ERP - Cross-Variant Automated Acceptance Test Suite
+ERP - Cross-Variant Automated Acceptance Test Suite
 Runs and validates business invariants across Variant A and Variant B.
 """
 
@@ -11,7 +11,9 @@ import sqlite3
 
 def test_variant_b_database():
     print("[1/3] Verifying Variant B SQLite/MySQL Database & Ledgers...")
-    db_path = os.path.join("variant-b-php-mysql", "database", "dreams_erp.sqlite")
+    db_path = os.path.join("variant-b-php-mysql", "database", "erp.sqlite")
+    if not os.path.exists(db_path):
+        db_path = os.path.join("variant-b-php-mysql", "database", "dreams_erp.sqlite")
     if not os.path.exists(db_path):
         print("  [FAIL] Database file not found at", db_path)
         return False
@@ -69,12 +71,12 @@ def test_variant_a_frontend_tests():
         print("  [FAIL] Vitest Suite Failed:\n", res.stderr or res.stdout)
         return False
     
-    print("  [PASS] All 6 Variant A Vitest Acceptance Tests Passed (Exit Code 0)")
+    print("  [PASS] All 9 Variant A Vitest Acceptance Tests Passed (Exit Code 0)")
     return True
 
 def main():
     print("========================================================")
-    print("DREAMS ERP - CROSS-VARIANT ACCEPTANCE VERIFICATION")
+    print("ERP - CROSS-VARIANT ACCEPTANCE VERIFICATION")
     print("========================================================\n")
     
     b1 = test_variant_b_database()

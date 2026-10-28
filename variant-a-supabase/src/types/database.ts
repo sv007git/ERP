@@ -38,12 +38,21 @@ export interface Deal {
   code: string;
   name: string;
   company_name: string | null;
+  address?: string;
   stage: DealStage;
   probability: number;
   deal_value: number;
   status: 'Open' | 'Won' | 'Lost';
   priority: 'Low' | 'Medium' | 'High';
+  source?: string;
   due_date: string | null;
+  follow_up_date?: string;
+  tags?: string[];
+  projects?: string[];
+  owners?: string[];
+  contacts?: string[];
+  last_modified?: string;
+  modified_by?: string;
   created_at: string;
 }
 
@@ -51,10 +60,17 @@ export interface DealActivity {
   id: string;
   deal_id: string;
   user_name: string;
-  type: 'meeting' | 'call' | 'note' | 'task';
+  type: 'activity' | 'meeting' | 'call' | 'note' | 'task' | 'file' | 'email';
   title: string;
   description: string;
   created_at: string;
+  date_group?: string;
+  priority?: 'Low' | 'Medium' | 'High';
+  reminder?: string;
+  assigned_to?: string;
+  file_name?: string;
+  file_size?: string;
+  call_outcome?: string;
 }
 
 export interface Employee {
@@ -86,6 +102,7 @@ export interface Product {
   name: string;
   sku: string;
   category: string;
+  brand?: string;
   unit: string;
   quantity: number;
   selling_price: number;
@@ -110,6 +127,53 @@ export interface Invoice {
   total_amount: number;
   paid_amount: number;
   status: 'Pending' | 'Paid' | 'Partially Paid';
+  items?: { description: string; quantity: number; unit_price: number }[];
+}
+
+export interface SalesOrder {
+  id: string;
+  order_number: string;
+  customer_name: string;
+  order_date: string;
+  total_amount: number;
+  status: 'Pending' | 'Confirmed' | 'Dispatched' | 'Delivered';
+}
+
+export interface PurchaseOrder {
+  id: string;
+  po_number: string;
+  supplier_name: string;
+  category: string;
+  order_date: string;
+  delivery_date: string;
+  total_amount: number;
+  ordered_qty: number;
+  delivered_qty: number;
+  status: 'Delivered' | 'In Transit' | 'Pending' | 'Partially Delivered';
+}
+
+export interface Project {
+  id: string;
+  code: string;
+  name: string;
+  description: string;
+  progress: number;
+  team_leader: string;
+  team_members: string[];
+  deadline: string;
+  status: 'In Progress' | 'Completed' | 'Pending';
+}
+
+export interface Ticket {
+  id: string;
+  code: string;
+  customer_name: string;
+  subject: string;
+  priority: 'Low' | 'Medium' | 'High';
+  status: 'Open' | 'Pending' | 'Resolved' | 'Closed';
+  assigned_to: string;
+  created_at: string;
+  last_updated: string;
 }
 
 export interface GlEntry {

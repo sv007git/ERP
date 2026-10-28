@@ -1,4 +1,4 @@
--- Dreams ERP: Initial PostgreSQL / Supabase Schema Migration
+﻿-- ERP: Initial PostgreSQL / Supabase Schema Migration
 -- Migration: 20261027000001_initial_schema.sql
 
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";

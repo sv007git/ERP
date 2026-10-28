@@ -1,4 +1,4 @@
-# Dreams ERP Design System Specification
+﻿# ERP Design System Specification
 
 **Document:** `shared-specifications/DESIGN_SYSTEM.md`  
 **Visual Foundation:** Sourced directly from workspace UI references (`02_CRM_Dashboard.jpg` through `09_Projects.jpg`)  
@@ -67,7 +67,7 @@ Soft tinted backgrounds with solid border and dark readable text:
 
 ### 3.2 Sidebar Navigation
 - **Width**: 260px (`w-64`)
-- **Brand Header**: Spiral Dreams ERP logo + "Dreams ERP"
+- **Brand Header**: Spiral ERP logo + "ERP"
 - **Group Headings**: Uppercase, small, muted (`text-xs font-bold text-slate-400 px-4 py-2 uppercase tracking-wider`)
   - **Main**: CRM Dashboard, HRM Dashboard, Inventory Dashboard, Sales Dashboard, Procurement Dashboard
   - **Inventory**: Products, Categories, Brands, Units, Suppliers, Warehouses, Stock Movement

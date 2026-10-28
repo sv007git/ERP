@@ -1,5 +1,5 @@
-# Shared Database Dictionary
-## Dreams ERP / CRM Dual-Stack Platform
+﻿# Shared Database Dictionary
+## ERP / CRM Dual-Stack Platform
 
 **Status:** Approved Reference Schema  
 **Dialect Portability:** PostgreSQL 15+ (Variant A Supabase) and MySQL 8.0+ / MariaDB 10.11+ / SQLite 3 (Variant B PHP)  

@@ -1,6 +1,6 @@
-# Dreams ERP - Dual-Stack Enterprise Business Platform
+﻿# ERP - Dual-Stack Enterprise Business Platform
 
-A production-grade, dual-stack ERP and CRM platform built and maintained on Windows. Faithfully implements the **Dreams ERP** design system (`02_CRM_Dashboard.jpg` through `09_Projects.jpg`) with two independently runnable architectures:
+A production-grade, dual-stack ERP and CRM platform built and maintained on Windows. Faithfully implements the **ERP** design system (`02_CRM_Dashboard.jpg` through `09_Projects.jpg`) with two independently runnable architectures:
 
 - **Variant A (`variant-a-supabase/`)**: Modern TypeScript / React 19 web frontend with Supabase backend (PostgreSQL 15+, Supabase Auth, Row Level Security, and Storage).
 - **Variant B (`variant-b-php-mysql/`)**: Modular PHP 8.5+ monolith with MySQL / MariaDB / SQLite, service-layer architecture, deterministic migrations, and double-entry general ledger.
@@ -27,7 +27,7 @@ ERP/
 │   ├── DATABASE_DICTIONARY.md       # Tables, columns, constraints & indexes
 │   ├── ROLE_PERMISSION_MATRIX.md    # RBAC & granular permissions
 │   ├── API_CONTRACTS.md             # Standard RESTful API endpoints
-│   ├── DESIGN_SYSTEM.md             # Dreams ERP tokens, styles & layouts
+│   ├── DESIGN_SYSTEM.md             # ERP tokens, styles & layouts
 │   ├── FEATURE_PARITY.md            # Parity mapping & acceptance criteria
 │   └── DECISIONS.md                 # Architectural Decision Records (ADRs)
 │
@@ -132,7 +132,7 @@ In separate PowerShell terminals:
 | **HRMS** | Employee directory, attendance clock-in, leave approval & balance deduction | ✅ | ✅ | Complete |
 | **Finance & Accounting**| Chart of accounts, double-entry GL ledger, invoice settlement, payment GL | ✅ | ✅ | Complete |
 | **Inventory & Stock** | Products catalog, warehouse utilization, immutable stock ledger movements | ✅ | ✅ | Complete |
-| **Dreams ERP UI** | 4-card KPI row, collapsible sidebar, status pills, responsive design | ✅ | ✅ | Complete |
+| **ERP UI** | 4-card KPI row, collapsible sidebar, status pills, responsive design | ✅ | ✅ | Complete |
 
 ---
 

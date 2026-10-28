@@ -1,7 +1,7 @@
-# Security, Updates & Patching Protocol
+﻿# Security, Updates & Patching Protocol
 
 **Document:** `deployment/SECURITY_AND_PATCHING.md`  
-**System:** Dreams ERP / CRM Dual-Stack Platform  
+**System:** ERP / CRM Dual-Stack Platform  
 
 ---
 

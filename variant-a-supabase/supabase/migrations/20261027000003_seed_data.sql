@@ -1,4 +1,4 @@
--- Dreams ERP: Initial Development Seed Data Migration
+﻿-- ERP: Initial Development Seed Data Migration
 -- Migration: 20261027000003_seed_data.sql
 
 DO $$

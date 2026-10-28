@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 declare(strict_types=1);
 
@@ -8,7 +8,7 @@ require_once __DIR__ . '/seeders/DatabaseSeeder.php';
 use App\Core\Database;
 use App\Database\Seeders\DatabaseSeeder;
 
-echo "=== Dreams ERP Database Seeder ===\n";
+echo "=== ERP Database Seeder ===\n";
 
 try {
     $pdo = Database::getConnection();

@@ -1,7 +1,7 @@
-# Architectural Decision Records (ADRs)
+﻿# Architectural Decision Records (ADRs)
 
 **Document:** `shared-specifications/DECISIONS.md`  
-**System:** Dreams ERP / CRM Dual-Stack Platform  
+**System:** ERP / CRM Dual-Stack Platform  
 
 ---
 
@@ -12,8 +12,8 @@
 
 ---
 
-### ADR-002: Dreams ERP Visual Reference Alignment
-- **Context**: The workspace contains detailed reference screenshots (`02_CRM_Dashboard.jpg` through `09_Projects.jpg`) showing a unified, high-density business UI named "Dreams ERP".
+### ADR-002: ERP Visual Reference Alignment
+- **Context**: The workspace contains detailed reference screenshots (`02_CRM_Dashboard.jpg` through `09_Projects.jpg`) showing a unified, high-density business UI named "ERP".
 - **Decision**: Adopt the exact layout, color tokens (Emerald primary, 4-card KPI row with orange/purple/bronze/pink accents, deal chevrons, rounded white cards), and navigation hierarchy from the reference screenshots.
 - **Consequences**: Delivers a cohesive, professional user experience that matches the client's supplied visual expectations.
 

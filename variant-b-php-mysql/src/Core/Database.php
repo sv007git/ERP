@@ -21,7 +21,7 @@ class Database
         $driver = $config['driver'] ?? 'sqlite';
 
         if ($driver === 'sqlite') {
-            $dbPath = $config['database'] ?? __DIR__ . '/../../database/dreams_erp.sqlite';
+            $dbPath = $config['database'] ?? (file_exists(__DIR__ . '/../../database/erp.sqlite') ? __DIR__ . '/../../database/erp.sqlite' : __DIR__ . '/../../database/dreams_erp.sqlite');
             $dir = dirname($dbPath);
             if (!is_dir($dir)) {
                 mkdir($dir, 0777, true);
@@ -35,7 +35,7 @@ class Database
         } else {
             $host = $config['host'] ?? '127.0.0.1';
             $port = $config['port'] ?? 3306;
-            $db = $config['database'] ?? 'dreams_erp';
+            $db = $config['database'] ?? 'erp';
             $user = $config['username'] ?? 'root';
             $pass = $config['password'] ?? '';
             $charset = $config['charset'] ?? 'utf8mb4';
@@ -88,7 +88,7 @@ class Database
 
         $driver = $env['DB_CONNECTION'] ?? 'sqlite';
         if ($driver === 'sqlite') {
-            $file = $env['DB_FILE'] ?? 'database/dreams_erp.sqlite';
+            $file = $env['DB_FILE'] ?? (file_exists(__DIR__ . '/../../database/erp.sqlite') ? 'database/erp.sqlite' : 'database/dreams_erp.sqlite');
             $dbPath = (str_starts_with($file, '/') || str_contains($file, ':')) 
                 ? $file 
                 : __DIR__ . '/../../' . $file;
@@ -102,7 +102,7 @@ class Database
             'driver' => 'mysql',
             'host' => $env['DB_HOST'] ?? '127.0.0.1',
             'port' => (int)($env['DB_PORT'] ?? 3306),
-            'database' => $env['DB_DATABASE'] ?? 'dreams_erp',
+            'database' => $env['DB_DATABASE'] ?? 'erp',
             'username' => $env['DB_USERNAME'] ?? 'root',
             'password' => $env['DB_PASSWORD'] ?? '',
             'charset' => 'utf8mb4',

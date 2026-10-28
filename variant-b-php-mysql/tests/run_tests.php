@@ -29,7 +29,7 @@ function assertCondition(bool $cond, string $name): void {
 }
 
 echo "========================================================\n";
-echo "DREAMS ERP - VARIANT B AUTOMATED ACCEPTANCE TEST SUITE\n";
+echo "ERP - VARIANT B AUTOMATED ACCEPTANCE TEST SUITE\n";
 echo "========================================================\n\n";
 
 $pdo = Database::getConnection();

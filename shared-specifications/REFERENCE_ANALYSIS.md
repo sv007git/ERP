@@ -1,4 +1,4 @@
-# Reference Architecture & License Analysis
+﻿# Reference Architecture & License Analysis
 
 This document provides a thorough analysis of the six open-source reference repositories located in `C:\Users\HARISH VYAS\Projects\ERP`, evaluating their frameworks, architecture, databases, authorization models, module structures, workflows, and licensing obligations.
 
@@ -104,7 +104,7 @@ This document provides a thorough analysis of the six open-source reference repo
 
 Based on the analysis of these six systems and the reference UI assets in the workspace:
 
-1. **Visual Language**: Adopt the "Dreams ERP" design language evidenced in `02_CRM_Dashboard.jpg` through `09_Projects.jpg`—emerald primary branding, clean card surfaces, chevron deal pipelines, comprehensive multi-metric KPI rows, and responsive data tables with status badges.
+1. **Visual Language**: Adopt the "ERP" design language evidenced in `02_CRM_Dashboard.jpg` through `09_Projects.jpg`—emerald primary branding, clean card surfaces, chevron deal pipelines, comprehensive multi-metric KPI rows, and responsive data tables with status badges.
 2. **Double-Entry Financial Architecture**: Adopt ERPNext's pattern of immutable `gl_entries` for all posted financial transactions, paired with decimal-safe numeric fields (stored as `DECIMAL(15,2)`).
 3. **Traceable Inventory Ledger**: Adopt ERPNext's pattern of immutable `stock_ledger_entries` recording every quantity delta with warehouse, batch/reference, and valuation impact.
 4. **Service-Layer PHP Architecture**: Adopt EspoCRM's clean layered architecture for Variant B: PSR-4 controllers, request validation, business service layer, transactional boundaries, and parameter-bound PDO queries.

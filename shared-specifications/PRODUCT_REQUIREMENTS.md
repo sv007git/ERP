@@ -1,5 +1,5 @@
-# Product Requirements Specification (PRS)
-## Dreams ERP / CRM Dual-Stack Platform
+﻿# Product Requirements Specification (PRS)
+## ERP / CRM Dual-Stack Platform
 
 **Status:** Approved Architecture Specification  
 **Version:** 1.0.0  
@@ -11,7 +11,7 @@
 
 ## 1. Executive Overview & Mission
 
-The platform is a unified, multi-tenant business management solution inspired by the design system of Dreams ERP and the enterprise capabilities of ERPNext, EspoCRM, Frappe HRMS, and Idurar. The platform guarantees strict multi-tenant isolation, immutable audit trails, double-entry financial accounting, and traceable stock movements across two independently deployable technology stacks.
+The platform is a unified, multi-tenant business management solution inspired by the design system of ERP and the enterprise capabilities of ERPNext, EspoCRM, Frappe HRMS, and Idurar. The platform guarantees strict multi-tenant isolation, immutable audit trails, double-entry financial accounting, and traceable stock movements across two independently deployable technology stacks.
 
 ---
 

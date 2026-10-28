@@ -1,4 +1,4 @@
--- Dreams ERP: Enable Anon and Authenticated Full Read/Write Access
+﻿-- ERP: Enable Anon and Authenticated Full Read/Write Access
 -- Run this in your Supabase SQL Editor (https://supabase.com/dashboard/project/clobwkkjltlhxishhyhm/sql)
 
 DO $$

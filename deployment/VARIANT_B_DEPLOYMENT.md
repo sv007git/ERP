@@ -1,4 +1,4 @@
-# Variant B Production Deployment Guide
+﻿# Variant B Production Deployment Guide
 ## PHP 8.2+ & MySQL / MariaDB Production Deployment
 
 **Document:** `deployment/VARIANT_B_DEPLOYMENT.md`  
@@ -36,7 +36,7 @@ FLUSH PRIVILEGES;
 1. Clone / extract codebase to `/var/www/dreams-erp`.
 2. Configure `.env`:
 ```ini
-APP_NAME="Dreams ERP"
+APP_NAME="ERP"
 APP_ENV=production
 APP_DEBUG=false
 APP_URL=https://erp.yourdomain.com
@@ -128,7 +128,7 @@ server {
         </defaultDocument>
         <rewrite>
             <rules>
-                <rule name="Dreams ERP Front Controller" stopProcessing="true">
+                <rule name="ERP Front Controller" stopProcessing="true">
                     <match url="^" ignoreCase="false" />
                     <conditions logicalGrouping="MatchAll">
                         <add input="{REQUEST_FILENAME}" matchType="IsFile" negate="true" />

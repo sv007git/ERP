@@ -25,6 +25,13 @@ tools/
 # Reference Repositories (Stored locally, not tracked in git)
 New folder/
 references/
+crm-1.89.2/
+erpnext-16.52.1/
+espocrm-10.0.11/
+hrms-16.52.0/
+icehrm-36.0.1/
+idurar-erp-crm-4.1.1/
+erpgosaas-98/
 
 # OS Files
 .DS_Store

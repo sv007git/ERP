@@ -1,7 +1,7 @@
-# Dual-Stack System Architecture Specification
+﻿# Dual-Stack System Architecture Specification
 
 **Document:** `shared-specifications/ARCHITECTURE.md`  
-**System:** Dreams ERP / CRM Dual-Stack Platform  
+**System:** ERP / CRM Dual-Stack Platform  
 **Version:** 1.0.0  
 
 ---
@@ -17,7 +17,7 @@ flowchart TD
         SPEC_DICT["Database Dictionary"]
         SPEC_RBAC["Role & Permissions Matrix"]
         SPEC_API["API Contracts"]
-        SPEC_DS["Design System (Dreams ERP)"]
+        SPEC_DS["Design System (ERP)"]
         SPEC_TESTS["Shared Acceptance Tests"]
     end
 
@@ -48,7 +48,7 @@ flowchart TD
   - Unmatched developer velocity, zero bloat, instant HMR on Windows.
   - Type-safe integration with Supabase generated database types (`Database['public']['Tables']`).
 - **Styling**: **Tailwind CSS + Tailwind Animate**:
-  - Faithful pixel-level reproduction of the supplied "Dreams ERP" visual references (`02_CRM_Dashboard.jpg` through `09_Projects.jpg`).
+  - Faithful pixel-level reproduction of the supplied "ERP" visual references (`02_CRM_Dashboard.jpg` through `09_Projects.jpg`).
 - **Icons**: **Lucide React**:
   - Matches the clean, minimal aesthetic of modern enterprise ERPs.
 - **Backend & Database**: **Supabase**:
@@ -81,7 +81,7 @@ variant-a-supabase/
 │   ├── context/                 # AuthContext, TenantContext, ThemeContext
 │   ├── hooks/                   # Custom data-fetching hooks
 │   ├── lib/                     # Supabase client singleton, API helpers, formatters
-│   ├── pages/                   # Route views mapped directly to Dreams ERP dashboards
+│   ├── pages/                   # Route views mapped directly to ERP dashboards
 │   │   ├── DashboardPage.tsx    # CRM / Executive dashboard
 │   │   ├── HrmDashboardPage.tsx
 │   │   ├── InventoryPage.tsx
